@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foodland Restro | Digital Menu</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Outfit', sans-serif; transition: 0.3s; }
+
+#modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+    z-index: 1000; justify-content: center; align-items: center; opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#modal-card {
+    background: white; padding: 25px; border-radius: 40px;
+    text-align: center; max-width: 400px; width: 85%;
+    transform: scale(0.5);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+#modal-overlay.active { display: flex; opacity: 1; }
+#modal-overlay.active #modal-card { transform: scale(1); }
+
+.item-card { cursor: pointer; transition: transform 0.3s ease; }
+.item-card:hover { transform: translateY(-8px); }
+.price-tag { color: #e11d48; font-weight: 800; }
+
+.signature {
+    font-family: 'cursive', sans-serif;
+    border-top: 1px solid #333;
+    padding-top: 5px; display: inline-block;
+}
+</style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<div id="modal-overlay" onclick="closeModal()">
+    <div id="modal-card" onclick="event.stopPropagation()">
+        <img id="modal-img" src="" class="w-full h-72 object-cover rounded-3xl mb-4 shadow-lg">
+        <h2 id="modal-name" class="text-3xl font-black uppercase tracking-tight">Item Name</h2>
+        <p id="modal-price" class="text-2xl price-tag mt-2">Price</p>
+        <button class="mt-6 bg-red-600 text-white px-8 py-2 rounded-full font-bold uppercase text-xs" onclick="closeModal()">Close</button>
+    </div>
+</div>
+
+<nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-center items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-red-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-red-200">F</div>
+            <h1 class="text-3xl font-black tracking-tighter uppercase">Foodland <span class="text-red-600">Restro</span></h1>
+        </div>
+    </div>
+</nav>
+
+<header class="relative h-[400px] flex items-center justify-center text-white overflow-hidden">
+    <img src="https://t3.ftcdn.net/jpg/02/05/87/60/360_F_205876015_hYYs7ugqoU8QAobSS3TbnGQ92qyS5gEc.jpg" class="absolute inset-0 w-full h-full object-cover brightness-50" alt="Restaurant Ambiance">
+    <div class="relative z-10 text-center px-4">
+        <h2 class="text-5xl font-bold mb-4">Where Every Bite Tells A Story</h2>
+        <p class="text-xl opacity-90">From juicy momos to smoky roasts — pure Prakashpur magic</p>
+    </div>
+      <!-- ⭐ Add chef here ⭐ -->
+    <img src="https://img.pikbest.com/png-images/20250502/3d-hd-little-male-chef_11694697.png!w700wp" 
+         class="absolute bottom-7 left-3 w-48 sm:w-56 md:w-72 lg:w-96
+ drop-shadow-xl"> 
+         <img src="https://static.vecteezy.com/system/resources/thumbnails/025/002/348/small/cute-cartoon-chef-character-on-transparent-background-generative-ai-png.png" 
+         class="absolute bottom-7 right-3 w-48 sm:w-56 md:w-72 lg:w-96
+ drop-shadow-xl">
+</header>
+
+<main class="max-w-6xl mx-auto px-6 py-12 relative z-10">
+
+    <div class="menu-bg"></div>
+
+   <style>
+    .menu-bg {
+        position: absolute;
+        inset: 0;
+        background-image: url('https://i.etsystatic.com/15433923/r/il/75235a/1285813349/il_fullxfull.1285813349_m5tx.jpg');
+        background-repeat: repeat;
+        background-size: 450px;  
+        opacity: 0.25;            
+        z-index: -1;
+    }
+</style>
+
+<!-- ⭐ ADD THIS STYLE BELOW ⭐ -->
+<style>
+/* Keep text between chefs on small screens */
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+/* Make sure text stays above chefs */
+header > div {
+  position: relative;
+  z-index: 20;
+}
+
+/* Chef placement adjustments */
+header img {
+  z-index: 10;
+}
+
+/* Mobile layout fix */
+@media (max-width: 640px) {
+  header {
+    padding-bottom: 120px;
+  }
+
+  /* Pull chefs lower so text sits cleanly in the middle */
+  header img {
+    bottom: 0;
+    width: 120px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  header {
+    padding-bottom: 150px;
+  }
+  header img {
+    width: 100px;
+  }
+}
+</style>
+
+
+<h1 class="text-3xl font-black mb-10 border-b-4 border-red-700 inline-block">OUR MENU</h1>
+<div id="OUR MENU" class="grid grid-cols-2 md:grid-cols-5 gap-0 mb-0"></div>
+
+<h2 class="text-2xl font-black mb-8 border-b-4 border-red-600 inline-block">HOT DRINKS</h2>
+<div id="hot-drinks" class="grid grid-cols-2 md:grid-cols-5 gap-6 mb-16"></div>
+
+<h2 class="text-2xl font-black mb-8 border-b-4 border-blue-600 inline-block">COLD DRINKS</h2>
+<div id="cold-drinks" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-16"></div>
+
+<h2 class="text-2xl font-black mb-8 border-b-4 border-red-600 inline-block">MOMOS</h2>
+<div id="momo-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"></div>
+
+<h2 class="text-2xl font-black mb-8 border-b-4 border-yellow-500 inline-block">CHOWMEIN</h2>
+<div id="chowmein-grid" class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-16"></div>
+
+<h2 class="text-2xl font-black mb-8 border-b-4 border-red-600 inline-block">NON-VEG ITEMS</h2>
+<div id="nonveg-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"></div>
+
+<h2 class="text-2xl font-black mb-8 border-b-4 border-orange-600 inline-block">ROLLS</h2>
+<div id="rolls-grid" class="grid grid-cols-2 gap-6 mb-16"></div>
+
+<h2 class="text-2xl font-black mb-8 border-b-4 border-green-600 inline-block">VEG ITEMS</h2>
+<div id="veg-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"></div>
+
+<h2 class="text-2xl font-black mb-8 border-b-4 border-purple-600 inline-block">THUKPA</h2>
+<div id="thukpa-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"></div>
+
+<h2 class="text-2xl font-black mb-8 border-b-4 border-pink-600 inline-block">RICE ITEMS</h2>
+<div id="rice-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"></div>
+
+</main>
+
+<footer class="bg-gray-900 text-white py-16 px-6 relative overflow-hidden">
+<div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
+<div>
+<h3 class="text-2xl font-black mb-4">FOODLAND RESTRO</h3>
+<p class="text-gray-400 leading-relaxed">
+📍 <strong>Location:</strong> Barahakshetra-10, Prakashpur, Sunsari<br>
+📞 <strong>Contact:</strong> +9779825088705<br>
+📧 <strong>Gmail:</strong> foodland86@gmail.com
+</p>
+  </div>
+            <div class="text-right flex flex-col justify-end items-end">
+                <div class="text-sm text-gray-500 text-right">
+                   
+                    <div class="developer-logo-container">
+    <div class="dipendra-logo">
+        <div class="logo-inner">
+            <span class="logo-letter">D</span>
+        </div>
+        <div class="logo-ring"></div>
+    </div>
+
+    <div class="developer-info">
+        <p class="label">Developed By</p>
+      
+        <div class="signature">Dipendra</div>
+    </div>
+</div>
+
+<style>
+    .developer-logo-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: #111827; /* Dark background like your footer */
+        padding: 15px 25px;
+        border-radius: 50px;
+        width: fit-content;
+    }
+
+    .dipendra-logo {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logo-inner {
+        width: 100%;
+        height: 100%;
+        background: #dc2626; /* Foodland Red */
+        border-radius: 15px; /* Modern rounded square */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2;
+        transform: rotate(-10deg); /* Stylized tilt */
+        box-shadow: 0 10px 15px rgba(220, 38, 38, 0.3);
+    }
+
+    .logo-letter {
+        color: white;
+        font-family: 'Arial Black', sans-serif;
+        font-size: 32px;
+        font-weight: 900;
+        transform: rotate(10deg); /* Correct the tilt for the letter */
+    }
+
+    .logo-ring {
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        border: 2px solid #ef4444;
+        border-radius: 18px;
+        opacity: 0.5;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.05); opacity: 0.2; }
+        100% { transform: scale(1); opacity: 0.5; }
+    }
+
+    .developer-info {
+        text-align: left;
+    }
+
+    .label {
+        color: #9ca3af;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin: 0;
+        font-weight: bold;
+    }
+
+    .name {
+        color: white;
+        font-size: 20px;
+        font-weight: 800;
+        margin: 0;
+        line-height: 1;
+    }
+
+    .signature {
+        color: #ef4444;
+        font-family: 'Brush Script MT', cursive;
+        font-size: 18px;
+        margin-top: 5px;
+        border-top: 1px solid #374151;
+        padding-top: 2px;
+    }
+</style>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+<script>
+// Menu data
+const menu = {
+hot: [
+{n:'Milk Tea', p:25, i:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQG9pTesSO6z0NoJIh1zMyuY2tl12tHgk5PIw&s'},
+{n:'Black Tea', p:15, i:'https://i.ndtvimg.com/i/2017-10/black-tea-encourages-weight-loss_650x400_51507196055.jpg?q=50'},
+{n:'Hot Lemon', p:50, i:'https://media.istockphoto.com/id/687227868/photo/steaming-hot-lemon-water.jpg?s=612x612&w=0&k=20&c=cEp5KaqGjN1ZlwHX2yl7zR5Jil1OktICgKWXkBSCiO4='},
+{n:'Milk Coffee', p:70, i:'https://images.pexels.com/photos/14704656/pexels-photo-14704656.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'},
+{n:'Black Coffee', p:50, i:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToc1Zor80zVJrca_z7ZkekwqxrwKO08o2kcA&s'}
+],
+cold: [
+{n:'Cold Coffee', p:120, i:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFvsXO4CDmu2Yl5BNHDp7_oijL5VeXBByP4A&s'},
+{n:'Chocolate Shake', p:150, i:'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=500'},
+{n:'Strawberry Shake', p:150, i:'https://st.focusedcollection.com/11312302/i/1800/focused_152924386-stock-photo-smoothie-on-black-background.jpg'},
+{n:'Lemonade', p:100, i:'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500'},
+{n:'Plain Lassi', p:100, i:'https://media.istockphoto.com/id/1008799838/photo/image-of-a-glass-of-lassi-made-from-milk-curd.jpg?s=612x612&w=0&k=20&c=L--UXX-L2bsK6Jy-mEigONFj9QEJyvU8b77FJnBLpBg='},
+{n:'Chocolate Lassi', p:150, i:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZi6vl_UtGCDcHPUYM2onxVM2w4vtAwuZoKQ&s'}
+],
+momo: [
+{cat:'Veg Momo', prices:{Steam:80,Fry:110,Jhol:130,Chilly:150}, images:{
+Steam:'https://thumbs.dreamstime.com/b/veg-steamed-momo-nepalese-traditional-dish-momo-stuffed-vegetables-then-cooked-served-sauce-ceramic-black-294263263.jpg',
+Fry:'https://media.istockphoto.com/id/1341123015/photo/fried-momos-dumpling.jpg?s=612x612&w=0&k=20&c=_YNDYwKsUv2KcAZBD70EhcKtG1S7epoUNQLQPdL_gy0=',
+Jhol:'https://junifoods.com/wp-content/uploads/2024/06/Jhol-Momo-in-spicy-tomato-sauce-nepali-recipe.jpg',
+Chilly:'https://media-cdn.tripadvisor.com/media/photo-s/0d/51/29/0f/chilly-momo.jpg'
+}},
+{cat:'Chicken Momo', prices:{Steam:100,Fry:130,Jhol:150,Chilly:180}, images:{
+Steam:'https://thumbs.dreamstime.com/b/picture-steamed-chicken-stuffed-momo-served-black-plate-along-soup-bowl-sauce-background-264303041.jpg',
+Fry:'https://www.shutterstock.com/image-photo/chicken-fried-momos-garnished-black-600nw-2308145803.jpg',
+Jhol:'https://junifoods.com/wp-content/uploads/2024/06/Spicy-Tomato-Jhol-Momo-%E0%A4%9F%E0%A4%AE%E0%A4%BE%E0%A4%9F%E0%A4%B0-%E0%A4%85%E0%A4%9A%E0%A4%BE%E0%A4%B0%E0%A4%95%E0%A5%8B-%E0%A4%9D%E0%A5%8B%E0%A4%B2-%E0%A4%AE%E0%A5%8B%E0%A4%AE%E0%A5%8B-1-480x270.jpg',
+Chilly:'https://thumbs.dreamstime.com/b/picture-pan-fried-chicken-stuffed-momo-sauce-served-black-plate-background-236806032.jpg'
+}},
+{cat:'Pork Momo', prices:{Steam:110,Fry:140,Jhol:160,Chilly:190}, images:{
+Steam:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCmPDERaYAsoerwdJhousUWD0URbPCyl00-g&s',
+Fry:'https://media.istockphoto.com/id/1325962009/photo/fried-potstickers-or-dumplings.jpg?s=612x612&w=0&k=20&c=bWcQescGnDLI4UYBTgHT1wzcCT517e7hw9V-m0q6TfU=',
+Jhol:'https://thumbs.dreamstime.com/b/spicy-soup-momos-topped-green-onions-black-bowl-isolated-white-background-side-view-south-asian-cuisine-405825079.jpg',
+Chilly:'https://img.freepik.com/premium-photo/tasty-pork-chilli-momos-momos-dumplings-picture-photography_1020697-137163.jpg'
+}}
+],
+chow: [
+{n:'Veg Chowmein', p:90, i:'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500'},
+{n:'Chicken Chowmein', p:120, i:'https://img.freepik.com/premium-photo/chow-mein-black-plate-top-view_636537-35828.jpg'},
+{n:'Pork Chowmein', p:130, i:'https://static.vecteezy.com/system/resources/thumbnails/027/788/125/small_2x/stir-fry-chow-mein-noodles-with-pork-and-vegetable-in-black-bowl-asian-style-food-ai-generative-photo.jpg'},
+{n:'Mix Chowmein', p:150, i:'https://img.freepik.com/premium-photo/chow-mein-black-background-top-view-chinese-cuisine-concept-chinese-cuisine-top-view-black-background-food-photography_864588-43566.jpg'},
+{n:'Sausage Chowmein', p:130, i:'https://img.freepik.com/premium-photo/hakka-chow-mein-chicken-schezwan-noodles-black-bowl-dark-background-with-udon-noodles-vegetables-either-schezwan-sauce-chilli-sauce-schezwan-noodles-is-spicy-dish-from-indo_872147-6860.jpg'}
+],
+nonveg: [
+{n:'Chicken Roast', p:200, i:'https://entertainingthervlife.com/wp-content/uploads/2023/05/Featured-Images-1-1.jpg'},
+{n:'Chicken Lollipop', p:200, i:'https://thumbs.dreamstime.com/b/tandoori-chicken-lollipop-mayo-dip-chilli-sauce-served-dish-isolated-napkin-dark-background-top-view-indian-fastfood-310437371.jpg'},
+{n:'Drumstick', p:230, i:'https://st5.depositphotos.com/37068712/69174/i/450/depositphotos_691746956-stock-photo-fried-chicken-leg-drumstick-crispy.jpg'},
+{n:'Crispy Chicken', p:250, i:'https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=500'},
+{n:'Chicken Chilly', p:200, i:'https://t4.ftcdn.net/jpg/06/33/75/45/360_F_633754551_mYFW5BBCJgYBW7b8XCG4cI8PpoJEhSmK.jpg'},
+{n:'Manchurian', p:200, i:'https://img.freepik.com/premium-photo/mushroom-manchurian-dried-black-bowl-dark-background-indo-chinese-dish-with-fried-mushrooms-peppe_908985-33519.jpg'},
+{n:'Chicken Pakoda', p:180, i:'https://img.freepik.com/premium-photo/yummy-pakora-chicken-high-quality-real_1077802-161539.jpg'},
+{n:'Chicken Kurkure', p:200, i:'https://img.freepik.com/premium-photo/breaded-chicken-strips-fingers-with-ketchup-black-background-top-view-copy-space_89816-41013.jpg'}
+],
+rolls: [
+{n:'Chicken Roll', p:150, i:'https://img.freepik.com/premium-photo/chicken-wrap-with-vegetables-black-background_846334-741.jpg'},
+{n:'Veg Roll', p:120, i:'https://static.vecteezy.com/system/resources/previews/065/301/628/large_2x/crispy-spring-rolls-garnished-with-fresh-herbs-and-carrot-on-black-background-photo.jpg'}
+],
+veg: [
+{n:'French Fry', p:140, i:'https://img.freepik.com/free-photo/delicious-fries-studio_23-2151846534.jpg?semt=ais_hybrid&w=740&q=80'},
+{n:'Potato Chilly', p:200, i:'https://as2.ftcdn.net/jpg/04/67/79/55/1000_F_467795588_HX4CeBSdnxwexRBmUBR8vD7ZzIBfzptG.jpg'},
+{n:'Vatmas Sadeko', p:100, i:'https://i0.wp.com/dhruvascreations.com/wp-content/uploads/2021/06/sadeko-bhatmas.jpg?fit=1200%2C900&ssl=1'},
+{n:'Peanut Masala', p:120, i:'https://media.istockphoto.com/id/1721809914/photo/peanut-masala-chaat.jpg?s=612x612&w=0&k=20&c=cZ1eVKYhRkR7ynkMnyk_ZMU3j2tTOwVRwFQds8HHqCo='},
+{n:'Manchurian', p:150, i:'https://img.freepik.com/premium-photo/mushroom-manchurian-dried-black-bowl-dark-background-indo-chinese-dish-with-fried-mushrooms-peppe_908985-35379.jpg'},
+{n:'Veg Crispy', p:150, i:'https://www.shutterstock.com/image-photo/chicken-crispy-shredded-garnish-260nw-2696816839.jpg'},
+{n:'Veg Pakoda', p:100, i:'https://media.istockphoto.com/id/1641517682/photo/crispy-vegetables-or-chicken-pakora-pakoda-and-pakoray-with-chilli-sauce-served-in-dish.jpg?s=612x612&w=0&k=20&c=OHiDt7vGKk_tr2PjYQVh4g3T2WOlFETdqcFsA9KTEMI='},
+{n:'Onion Pakoda', p:120, i:'https://st4.depositphotos.com/5653638/39112/i/450/depositphotos_391122730-stock-photo-fried-onion-pakora-pyaj-pakoda.jpg'}
+],
+thukpa: [
+{n:'Veg Thukpa', p:90, i:'https://thumbs.dreamstime.com/b/tibetan-thukpa-noodle-soup-black-bowl-steaming-garnished-fresh-cilantro-served-showcasing-traditional-flavors-348847208.jpg'},
+{n:'Chicken Thukpa', p:130, i:'https://junifoods.com/wp-content/uploads/2024/05/The-Best-Chicken-Thukpa-Tibetan-Noodle-Soup-%E0%A4%95%E0%A5%81%E0%A4%96%E0%A5%81%E0%A4%B0%E0%A4%BE%E0%A4%95%E0%A5%8B-%E0%A4%A5%E0%A5%81%E0%A4%95%E0%A5%8D%E0%A4%AA%E0%A4%BE--480x270.jpg'},
+{n:'Pork Thukpa', p:150, i:'https://junifoods.com/wp-content/uploads/2024/05/Pork-Thukpa-Tibetan-Noodle-Soup-%E0%A4%B8%E0%A5%81%E0%A4%82%E0%A4%97%E0%A5%81%E0%A4%B0%E0%A4%95%E0%A5%8B-%E0%A4%A5%E0%A5%81%E0%A4%95%E0%A5%8D%E0%A4%AA%E0%A4%BE-480x270.jpg'}
+],
+rice: [
+{n:'Veg Fried Rice', p:120, i:'https://thumbs.dreamstime.com/b/savory-fried-rice-garnished-cilantro-black-plate-dark-background-featuring-egg-corn-peas-peppers-healthy-asian-cuisine-378753373.jpg'},
+{n:'Chicken Fried Rice', p:150, i:'https://thumbs.dreamstime.com/b/schezwan-chicken-fried-rice-black-bowl-dark-slate-background-indo-chinese-cuisine-dish-schezwan-chicken-fried-rice-black-159831851.jpg'},
+{n:'Egg Fried Rice', p:140, i:'https://as1.ftcdn.net/jpg/06/17/01/94/1000_F_617019439_2Sm5ofOwljaaOtz0PWtRbXA0lVH3qJap.jpg'},
+{n:'Mixed Fried Rice', p:200, i:'https://static.vecteezy.com/system/resources/previews/028/823/699/large_2x/fried-rice-in-bowl-at-dark-background-photo.jpeg'}
+]
+};
+
+// Generate card
+function generateCard(item){
+return `
+<div class="item-card bg-white p-4 rounded-2xl border shadow hover:shadow-lg" onclick="openModal('${item.n}','${item.p}','${item.i}')">
+<img src="${item.i}" class="w-full h-32 object-cover rounded-xl mb-3">
+<h3 class="font-black text-sm uppercase">${item.n}</h3>
+<p class="price-tag">Rs. ${item.p}</p>
+</div>`;
+}
+
+// Render all menus
+function render(){
+document.getElementById('hot-drinks').innerHTML = menu.hot.map(generateCard).join('');
+document.getElementById('cold-drinks').innerHTML = menu.cold.map(generateCard).join('');
+document.getElementById('chowmein-grid').innerHTML = menu.chow.map(generateCard).join('');
+document.getElementById('nonveg-grid').innerHTML = menu.nonveg.map(generateCard).join('');
+document.getElementById('rolls-grid').innerHTML = menu.rolls.map(generateCard).join('');
+document.getElementById('veg-grid').innerHTML = menu.veg.map(generateCard).join('');
+document.getElementById('thukpa-grid').innerHTML = menu.thukpa.map(generateCard).join('');
+document.getElementById('rice-grid').innerHTML = menu.rice.map(generateCard).join('');
+
+// Momo special rendering for Steam, Fry, Jhol, Chilly
+let momoHTML = '';
+menu.momo.forEach(m => {
+['Steam','Fry','Jhol','Chilly'].forEach(type=>{
+momoHTML += generateCard({n:`${m.cat} ${type}`, p:m.prices[type], i:m.images[type]});
+});
+});
+document.getElementById('momo-grid').innerHTML = momoHTML;
+}
+
+render();
+
+// Modal functions
+function openModal(name, price, img){
+document.getElementById('modal-name').innerText = name;
+document.getElementById('modal-price').innerText = `Rs. ${price}`;
+document.getElementById('modal-img').src = img;
+document.getElementById('modal-overlay').classList.add('active');
+}
+function closeModal(){
+document.getElementById('modal-overlay').classList.remove('active');
+}
+</script>
+</body>
+</html>
